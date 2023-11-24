@@ -1,0 +1,432 @@
+version: "3.1"
+
+rules:
+
+- rule: Say goodbye anytime the user says goodbye
+  steps:
+  - intent: goodbye
+  - action: utter_goodbye
+  - action: action_restart
+
+- rule: Greet User
+  condition:
+  - slot_was_set:
+    - conv_start: true
+  steps:
+  - intent: greet
+  - action: utter_greet
+
+- rule: Activate intro form. (Conv Start)
+  condition:
+  - slot_was_set:
+    - conv_start: false
+  steps:
+  - or:
+    - intent: greet
+    - intent: family_planning
+    - intent: start_family_planning
+    - intent: stop_family_planning
+    - intent: refer_me
+    - intent: get_products
+    - intent: other_issues
+    - intent: gpt_question
+    - intent: nlu_fallback
+  - action: utter_intro
+  - action: info_form
+  - active_loop: info_form
+
+- rule: Deactivate intro form.
+  condition:
+  - active_loop: info_form
+  steps:
+  - action: info_form
+  - active_loop: null
+  - slot_was_set:
+    - requested_slot: null
+  - action: action_intro
+
+- rule: Family Planning Deactivate
+  condition:
+  - active_loop: family_planning_form
+  steps:
+  - action: family_planning_form
+  - active_loop: null
+  - slot_was_set:
+    - requested_slot: null
+  - action: utter_planning_info
+  
+- rule: Start Family Planning (Previous Usage Affirm Form Deactivate)
+  condition:
+  - active_loop: previous_contraception_form
+  steps:
+  - action: previous_contraception_form
+  - active_loop: null
+  - slot_was_set:
+    - requested_slot: null
+  - action: utter_preg_prevention_duration
+
+- rule: Family Planning Activate
+  condition:
+  - slot_was_set:
+    - conv_start: true
+  steps:
+  - intent: family_planning
+  - action: family_planning_form
+  - active_loop: family_planning_form
+
+- rule: Stop/Switch Family Planning (Form Deactivate)
+  condition:
+  - active_loop: discon_req_form
+  steps:
+  - action: discon_req_form
+  - active_loop: null
+  - slot_was_set:
+    - requested_slot: null
+  - action: utter_preg_prevention_duration
+
+- rule: Product Details (Form Deactivate)
+  condition:
+  - active_loop: product_details_form
+  steps:
+  - action: product_details_form
+  - active_loop: null
+  - slot_was_set:
+    - requested_slot: null
+  - action: utter_product_details
+  #- action: action_Contraceptive_Injectables_Sayana_Press_Progesta
+
+  #- action: utter_refer_clinic
+
+- rule: Refer Clinic
+  condition:
+  - slot_was_set:
+    - conv_start: true
+  steps:
+  - intent: refer_me
+  - action: utter_refer_clinic
+
+- rule: Ask ChatGPT (Form Activate)
+  steps:
+  - intent: ask_gpt
+  - action: chatgpt_form
+  - active_loop: chatgpt_form
+
+- rule: Ask ChatGPT (Form Deactivate)
+  condition:
+  - active_loop: chatgpt_form
+  steps:
+  - action: chatgpt_form
+  - active_loop: null
+  - slot_was_set:
+    - requested_slot: null
+  - action: action_ask_gpt
+
+- rule: utter_preg_prevention_duration
+  steps:
+  - intent: preg_prevent_dur
+  - or:
+
+  
+    - slot_was_set:
+      - preg_prevention_duration: 0-3 months
+    - slot_was_set:
+      - preg_prevention_duration: 1-2 years
+    - slot_was_set:
+      - preg_prevention_duration: 3-4 years
+    - slot_was_set:
+      - preg_prevention_duration: 5-10 years
+    - slot_was_set:
+      - preg_prevention_duration: Permanently
+  - action: utter_preg_duration
+
+
+- rule: Get Nearest Clinic
+  steps:
+  - intent: get_clinic
+  - action: utter_clinic_details
+
+- rule: Other Issues
+  condition:
+  - slot_was_set:
+    - conv_start: true
+  steps:
+  - intent: other_issues
+  - action: utter_other_issues
+
+- rule: Product Details (Form Activate)
+  condition:
+  - slot_was_set:
+    - conv_start: true
+  steps:
+  - intent: get_products
+  - action: action_reset_product_slot
+  - action: product_details_form
+  - active_loop: product_details_form 
+
+# - rule: Fallback to GPT (Conv Start)
+#   conversation_start: true
+#   steps:
+#   - intent: nlu_fallback
+#   - action: action_ask_gpt
+#   - action: utter_intro
+#   - action: info_form
+#   - active_loop: info_form
+
+- rule: Fallback to GPT
+  condition:
+  - slot_was_set:
+    - conv_start: true
+  steps:
+  - or:
+    - intent: nlu_fallback
+    - intent: gpt_question
+  - action: action_ask_gpt
+
+- rule: Start Family Planning (Check Previous Usage)
+  condition:
+  - slot_was_set:
+    - conv_start: true
+  steps:
+  - intent: start_family_planning
+  - action: utter_check_previous_usage
+  # - intent: affirm
+  # - action: action_reset_previous_contraception_slot
+  # - action: previous_contraception_form
+  # - active_loop: previous_contraception_form
+  
+- rule: Stop/Switch Family Planning (Form Activate)
+  condition:
+  - slot_was_set:
+    - conv_start: true
+  steps:
+  - intent: stop_family_planning
+  - action: action_reset_discon_req_reason_slot
+  - action: discon_req_form
+  - active_loop: discon_req_form
+
+- rule: Check Prev Usage (True)
+  condition:
+  - slot_was_set:
+    - prev_usage: true
+  steps:
+  - intent: check_prev_usage
+  - action: action_reset_previous_contraception_slot
+  - action: previous_contraception_form
+  - active_loop: previous_contraception_form
+
+- rule: Check Prev Usage (False)
+  condition:
+  - slot_was_set:
+    - prev_usage: false
+  steps:
+  - intent: check_prev_usage
+  - action: utter_preg_prevention_duration
+
+
+- rule: User selects Daily Contraceptive Pills
+  steps:
+    - intent: daily_pills
+    - action: utter_preg_duration_daily_pills
+
+
+- rule: User selects daily_pills_effects
+  steps:
+    - intent: daily_pills_effects
+    - action: utter_daily_pills_effects
+
+- rule: User selects Daily Contraceptive Pills Database
+  steps:
+    - intent: levofem_defn
+    - action: utter_levofem_defn
+- rule: User selects Daily Contraceptive Pills Database
+  steps:
+    - intent: dianofem_defn
+    - action: utter_dianofem_defn
+- rule: User selects Daily Contraceptive Pills Database
+  steps:
+    - intent: desofem_defn
+    - action: utter_desofem_defn
+
+- rule: User selects Emergency Pills
+  steps:
+    - intent: emergency_pills
+    - action: utter_emergency_pills
+
+- rule: User selects Emergency Pills Database
+  steps:
+    - intent: emergency_pills_effects
+    - action: utter_emergency_pills_effects
+
+#- rule: User selects Emergency Pills Postpill
+  #steps:
+    #- intent: emergency_pills_effects_Postpill
+    #- action: utter_emergency_pills_effects_Postpill
+
+#- rule: User selects Emergency Pills Postpill_2
+  #steps:
+    #- intent: emergency_pills_effects_Postinor_2
+    #- action: utter_emergency_pills_effects_Postinor_2
+
+
+- rule: User selects contraceptive_injectables
+  steps:
+    - intent: contraceptive_injectables
+    - action: utter_contraceptive_injectables
+
+- rule: User selects diaphragm
+  steps:
+    - intent: diaphragm
+    - action: utter_diaphragm
+
+- rule: User selects female_condom
+  steps:
+    - intent: female_condom
+    - action: utter_female_condom
+
+- rule: User selects male_condom
+  steps:
+    - intent: male_condom
+    - action: utter_male_condom
+
+- rule: User selects implants
+  steps:
+    - intent: implants
+    - action: utter_implants
+
+- rule: User selects ius
+  steps:
+    - intent: ius
+    - action: utter_ius
+
+
+- rule: Handle /speak_age intent
+  steps:
+  - intent: speak_age
+  - action: speak_age
+
+- rule: Handle GPT intent
+  steps:
+  - intent: chat_gpt_answer
+  - action: utter_chat_gpt_answer
+
+- rule: Side effects
+
+  steps:
+  - intent: side_effects
+  - action: utter_ask_previous_contraception_form_previous_contraception_method
+  #- action: utter_preg_duration
+
+- rule: it that all another question
+  steps:
+  - intent: yes_that_is_all
+  - action: utter_yes_that_is_all
+
+- rule: sending the audio
+  steps:
+  - intent: penegra_audio
+  - action: action_penegra_audio
+  - action: utter_penegra_after_audio
+  - action: utter_refer_me_no
+
+- rule: it that all another question
+  steps:
+  - intent: Side_effect_Daily_Contraceptive_Pill
+  - action: utter_Side_effect_Daily_Contraceptive_Pill
+
+- rule: it that all another question
+  steps:
+  - intent: Side_effect_Emergency_Pill
+  - action: utter_Side_effect_Emergency_Pill
+
+- rule: it that all another question
+  steps:
+  - intent: Side_effect_Implants
+  - action: utter_Side_effect_Implants
+
+- rule: it that all another question
+  steps:
+  - intent: Side_effect_Injectibles
+  - action: utter_Side_effect_Injectibles
+
+- rule: it that all another question
+  steps:
+  - intent: Side_effect_IUS
+  - action: utter_Side_effect_IUS
+
+- rule: it that all another question
+  steps:
+  - intent: Side_effect_IUD
+  - action: utter_Side_effect_IUD
+
+- rule: it that all another question
+  steps:
+  - intent: SIde_effect_yes
+  - action: utter_SIde_effect_yes
+
+- rule: it that all another question
+  steps:
+  - intent: SIde_effect_no
+  - action: utter_SIde_effect_no
+
+- rule: it that all another question
+  steps:
+  - intent: satisfied_yes
+  - action: utter_satisfied_yes
+
+- rule: it that all another question
+  steps:
+  - intent: satisfied_no
+  - action: utter_satisfied_no
+
+
+- rule: it that all another question
+  steps:
+  - intent: help_yes
+  - action: utter_greet
+
+- rule: it that all another question
+  steps:
+  - intent: help_no
+  - action: utter_help_no
+
+#- rule: it that all another question
+  #steps:
+  #- intent: Contraceptive_Injectables_Sayana_Press
+  #- action: action_Contraceptive_Injectables_Sayana_Press_Progesta
+  #- action: utter_progesta_nearest_clinic
+
+
+#- rule: it that all another question
+  #steps:
+  #- intent: Contraceptive_Injectables_Progesta
+  #- action: action_Contraceptive_Injectables_Sayana_Press_Progesta
+  #- action: utter_progesta_nearest_clinic
+
+- rule: it that all another question
+  steps:
+  - intent: refer_me_no
+  - action: utter_refer_me_no
+
+- rule: it that all another question
+  steps:
+  - intent: refer_me_local_goverment_area
+  - action: utter_refer_me_local_goverment_area  
+
+- rule: it that all another question
+  steps:
+  - intent: Progesta_audio
+  - action: action_Progesta_audio
+  - action: utter_Contraceptive_Injectables_Progesta
+
+- rule: it that all another question
+  steps:
+  - intent: Sayana_Press_audio
+  - action: action_Sayana_Press_audio
+  - action: utter_Contraceptive_Injectables_Sayana_Press
+  - action: utter_refer_me_no
+ 
+
+- rule: User clicks 'No' not satisfy button
+  steps:
+  - intent: No
+  - action: utter_not_satisfied
