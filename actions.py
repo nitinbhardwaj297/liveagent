@@ -147,8 +147,8 @@ class ActionAskGPT(Action):
             question = tracker.get_slot("gpt_question")
         # answer = chatGPT.ask(question)
         print(question)
-        answer="OpenAI tokens limit reached"
-        #answer = langchain_qa.get_answer(question)
+        #answer="OpenAI tokens limit reached"
+        answer = langchain_qa.get_answer(question)
         print("answer", answer)
         dispatcher.utter_message(text=answer)
         time.sleep(2)
@@ -290,6 +290,55 @@ class Sayana_Press_audio_send(Action):
     ) -> List[Dict[Text, Any]]:
         chat_id = tracker.sender_id
         audio_path = "SayanaPress.mp3"
+        self.send_audio_to_telegram(chat_id, audio_path)
+
+        return []
+##added
+class Miso_fem_audio_send(Action):
+    def name(self) -> Text:
+        return "action_miso_fem_audio"
+
+    def send_audio_to_telegram(self, chat_id: Text, audio_path: Text) -> None:
+        bot_token = "6415620982:AAEe2yw_dkmzdOdieCq9OQSfjZ0587Y0VLo"
+        api_url = f"https://api.telegram.org/bot{bot_token}/sendAudio"
+        params = {"chat_id": chat_id}
+        files = {"audio": (audio_path, open(audio_path, "rb"))}
+        response = requests.post(api_url, params=params, files=files)
+        self.check_response_status(response, "Audio")
+
+    def run(
+        self,
+        dispatcher: CollectingDispatcher,
+        tracker: Tracker,
+        domain: Dict[Text, Any],
+    ) -> List[Dict[Text, Any]]:
+        chat_id = tracker.sender_id
+        audio_path = "miso_fem.mp3"
+        self.send_audio_to_telegram(chat_id, audio_path)
+
+        return []
+
+##added
+class Mifepak_audio_send(Action):
+    def name(self) -> Text:
+        return "action_mifepak_audio"
+
+    def send_audio_to_telegram(self, chat_id: Text, audio_path: Text) -> None:
+        bot_token = "6415620982:AAEe2yw_dkmzdOdieCq9OQSfjZ0587Y0VLo"
+        api_url = f"https://api.telegram.org/bot{bot_token}/sendAudio"
+        params = {"chat_id": chat_id}
+        files = {"audio": (audio_path, open(audio_path, "rb"))}
+        response = requests.post(api_url, params=params, files=files)
+        self.check_response_status(response, "Audio")
+
+    def run(
+        self,
+        dispatcher: CollectingDispatcher,
+        tracker: Tracker,
+        domain: Dict[Text, Any],
+    ) -> List[Dict[Text, Any]]:
+        chat_id = tracker.sender_id
+        audio_path = "mifepak.mp3"
         self.send_audio_to_telegram(chat_id, audio_path)
 
         return []
