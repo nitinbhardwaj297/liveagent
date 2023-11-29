@@ -313,7 +313,9 @@ rules:
 
   steps:
   - intent: side_effects
-  - action: utter_ask_previous_contraception_form_previous_contraception_method
+  #- action: utter_ask_previous_contraception_form_previous_contraception_method
+  - action: utter_ask_side_effects
+
   #- action: utter_preg_duration
 
 - rule: it that all another question
@@ -424,7 +426,26 @@ rules:
   - action: action_Sayana_Press_audio
   - action: utter_Contraceptive_Injectables_Sayana_Press
   - action: utter_refer_me_no
- 
+
+- rule: send audio
+  steps:
+  - intent: miso_fem_audio
+  - action: action_miso_fem_audio 
+
+- rule: send audio
+  steps:
+  - intent: mifepak_audio
+  - action: action_mifepak_audio 
+
+- rule: start using a method
+  steps:
+  - intent: how_long_prevent_pregency
+  - action: utter_preg_prevention_duration
+
+- rule: start using a method
+  steps:
+  - intent: why_not_satisfy
+  - action: utter_why_not_satisfy
 
 - rule: User clicks 'No' not satisfy button
   steps:
