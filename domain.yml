@@ -5,6 +5,8 @@ intents:
   - Sayana_Press_audio
   - refer_me_local_goverment_area
   - refer_me_no
+  - miso_fem_audio
+  - mifepak_audio
   - help_yes
   - family_planning_Contraceptive_Injectables
   - help_no
@@ -44,6 +46,8 @@ intents:
   - implants
   - ius
   - audio
+  - why_not_satisfy
+  - how_long_prevent_pregency
   - penegra_audio
   - Side_effect_IUD
   - Side_effect_IUS
@@ -57,13 +61,17 @@ actions:
   #- action_Contraceptive_Injectables_Sayana_Press_Progesta
   #- action_handle_contraception_selection
   - action_penegra_audio
+  - action_mifepak_audio
   - action_Sayana_Press_audio
   - utter_refer_me_no
+  - action_miso_fem_audio
   - action_Progesta_audio
   - action_ask_gpt
   - action_intro
   - action_audio
   - action_reset_product_slot
+  - utter_preg_prevention_duration
+  - utter_why_not_satisfy
   - action_reset_previous_contraception_slot
   - action_reset_discon_req_reason_slot
   - utter_chat_gpt_answer
@@ -2396,12 +2404,12 @@ responses:
         payload: /side_effects
     button_type: "vertical"
 
-  utter_ask_previous_contraception_form_previous_contraception_method:
+  utter_ask_side_effects:
   - text: "Ok. Which of these method do you want to know their side effects."
     buttons:
     - title: "Daily Contraceptive Pill"
       payload: "/Side_effect_Daily_Contraceptive_Pill"
-    - title: "Emergency Pill"
+    - title: "Emergency pill"
       payload: "/Side_effect_Emergency_Pill"
     - title: "Implants"
       payload: "/Side_effect_Implants"
@@ -2415,13 +2423,39 @@ responses:
       payload: "/Side_effect_IUD"
     button_type: vertical
 
+  utter_ask_previous_contraception_form_previous_contraception_method:
+  - text: "Ok. Which of these method do you want to know their side effects."
+    buttons:
+    - title: "Condoms and Diaphragms"
+      payload: "/previous_Condoms_and_Diaphragms"
+    - title: "Contraceptive Implants"
+      payload: "/previous_Contraceptive_Implants"
+    - title: "Daily Contraceptive Pill"
+      payload: "/previous_Daily_Contraceptive_Pill"
+    - title: "Emergency contraceptive pill"
+      payload: "/previous_Emergency_contraceptive_pill"
+    #- title: "Implants"
+      #payload: "/previous_Implants"
+    #- title: "Condoms"
+      #payload: "Condoms"
+    - title: "Injectibles contraceptives"
+      payload: "/previous_Injectibles"
+    - title: "IUD"
+      payload: "/previous_IUD"
+    - title: "IUS"
+      payload: "/previous_IUS"
+    button_type: vertical
+
   utter_ask_previous_contraception_form_previous_contraception_satisfaction:
   - text: "Were you satisfied with the last method?"
     buttons:
     - title: "Yes"
-      payload: "/refer_me"
+      payload: "/how_long_prevent_pregency"
     - title: "No"
-      payload: "No"
+      payload: "/why_not_satisfy"
+  utter_why_not_satisfy:
+  - text: "Can you tell me why you were not satisfied?"
+
 
   utter_not_satisfied:
   - text: "Can you tell me why you were not satisfied?"
@@ -2721,9 +2755,16 @@ responses:
       - type: slot
         name: product_category
         value: Lubricants and Gels
-    text: "Here are some of the effective and available lubricants and gels.\n\nClick on any of them to get their full details{product_category}:"
+    text: |
+      Lubricants, also known as gels or lubes, are specially formulated fluids used during sexual activity. They help reduce friction, discomfort and vaginal dryness, enhancing pleasure and preventing condom breakage. Lubricants come in water-based, silicone-based, or oil-based varieties. Water-based lubes are safe to use with all condoms and sex toys. Water-based lubricants do not alter the pH of the vagina, does not stain clothings, and can be easily washed off with water, while silicone and oil-based lubes should only be used with certain condom materials.
+
+      Click to listen to a short introduction of Lubricant in Pidgin, if you want.
+
+      Here are some of the effective and available lubricants and gels.
+
+      Click on any of them to get their full details{product_category}:
     buttons:
-    - title: FIESTA Intim Natural Gel
+    - title: Fiesta Gel
       payload: "FIESTA Intim Natural Gel"
     - title: KY Jelly
       payload: "KY Jelly"
@@ -2778,7 +2819,44 @@ responses:
       payload: "Contraceptive_Injectables_Progesta"
     - title: Sayana Press
       payload: "Contraceptive_Injectables_Sayana_Press"
-  
+      ## added
+  - condition:
+      - type: slot
+        name: product_category
+        value: IUCD/IUD
+    text: "Here are some of the effective and available lUDs.\n\nClick on any of them to get their full details."
+    buttons:
+    #- title: PostPill
+      #payload: "PostPill"
+    - title: Lydia IUD
+      payload: "Contraceptive_Injectables_Lydia_IUD"
+    - title: Eliora
+      payload: "Contraceptive_Injectables_Eliora"
+  ##added
+  - condition:
+      - type: slot
+        name: product_category
+        value: Misoprostol
+    text: "Misoprostol is a synthetic prostaglandin medication used to prevent and treat stomach and duodenal ulcers, induce labor, cause an abortion, and treat postpartum bleeding due to poor contraction of the uterus.\n\nIt is an effective cervical ripening agent prior to first-trimester surgical abortion.\n\nIt is recommended especially for women between 12 and 14 weeks of gestation, adolescents, and for women in whom cervical dilation is expected to be difficult either due to patient factors or provider inexperience.\n\nHere are some of the effective and available misoprostol products.\n\nClick on any of them to get their full details."
+    buttons:
+    #- title: PostPill
+      #payload: "PostPill"
+    - title: Miso-Fem
+      payload: "Contraceptive_Injectables_Miso-Fem"
+    - title: Mifepak
+      payload: "Contraceptive_Injectables_Mifepak"
+##added
+  - condition:
+      - type: slot
+        name: product_category
+        value: Diaphragm
+    image: "https://s3.typebot.io/public/workspaces/clmis6ucm000il50gyvzllels/typebots/clmis9a0q000ol50gdavazp8y/blocks/uydr8ci2f73mwelm9xcehjbh?v=1695487441206"
+    text: "A diaphragm or cap is a barrier method of contraception. It fits inside your vagina and prevents sperm passing through the cervix (the entrance of your womb)\n\nYou can click to watch a video on how to insert and remove a diaphragm in pidgin.\n\n https://www.youtube.com/watch?v=zw76siSZ2E4 \n\n https://www.youtube.com/watch?v=ettTJHL209w \n\n https://www.youtube.com/watch?v=6VV1Wi67o4Y \n\n You can vist your nearest pharmacy or health shop to purchase.\n\nDid I answer your question?"
+    buttons:
+    - title: Yes
+      payload: /satisfied_yes
+    - title: No
+      payload: /satisfied_no
 
   - condition:
       - type: slot
@@ -2834,6 +2912,51 @@ responses:
     button_type: vertical
 
   utter_product_details:
+##added
+  - condition:
+      - type: slot
+        name: product_name
+        value: "Contraceptive_Injectables_Miso-Fem"
+    image: "https://s3.typebot.io/public/workspaces/clk9ixvcx0005jt0fbmqw1kmk/typebots/cllwc05uj0009l80f5xsndtlz/blocks/rnibjxcqxalhj5bdya73t6de?v=1695033442476"
+    text: "Miso-Fem is a tested and trusted high-quality brand of Misoprostol that is used in the management of obstetric, gynecological, and medical conditions. used for maternal mortality reduction. These conditions include postpartum haemorrhage (PPH) and peptic ulcer induced by Non-Steroidal Anti-Inflammatory Drugs (NSAIDs).\n\nHow to Use\nMiso-Fem are to be taken under the tongue (dissolved under the tongue) and not to be swallowed, or through the vagina or rectal to be absolved. It is used for labor (pain) reduction by dilating the cervix.\n\nYou can click on the audio below to listen to a full explanation of Miso-Fem and usage in Pidgin if you want to."
+    buttons:
+    - title: "Listen Audio"
+      payload: /miso_fem_audio
+  
+  - condition:
+      - type: slot
+        name: product_name
+        value: "Contraceptive_Injectables_Mifepak"
+    image: "https://s3.typebot.io/public/workspaces/clk9ixvcx0005jt0fbmqw1kmk/typebots/cllwc05uj0009l80f5xsndtlz/blocks/nyk51muabe30nnrh2brm1ann?v=1695038721346"
+    text: "Mifepak is used for Intra-Uterine Fetal Demise, Therapeutic abortion, and conservative management of the placenta.It’s mode of work includes blocking the progesterone, causing the contraction and expulsion of the detached embryo.\n\nHow to Use\nTaken orally with water under healthcare supervision.\n\nYou can click on the audio below to listen to a short introduction to Mifepak in Pidgin if you want to."
+    buttons:
+    - title: "Listen Audio"
+      payload: /mifepak_audio
+
+  - condition:
+      - type: slot
+        name: product_name
+        value: "Contraceptive_Injectables_Eliora"
+    image: "https://s3.typebot.io/public/workspaces/clk9ixvcx0005jt0fbmqw1kmk/typebots/cllwc05uj0009l80f5xsndtlz/blocks/f41p5ei87ril6qassuiel2ul?v=1695034181128"
+    text: "Eloira, which is an IUS different from IUD due to absence of copper. A hormone (Levonorgestrel) replaces the copper. It is used to treat gynecological conditions and pregnancy preventions.\n\nI can refer you to a clinic if you would like to adopt this method.\n\nDo you want me to refer you to a clinic where you can get this method?"
+    buttons:
+    - title: "Yes"
+      payload: /refer_me_local_goverment_area
+    - title: "No"
+      payload: /refer_me_no
+
+  - condition:
+      - type: slot
+        name: product_name
+        value: "Contraceptive_Injectables_Lydia_IUD"
+    image: "https://s3.typebot.io/public/workspaces/clk9ixvcx0005jt0fbmqw1kmk/typebots/cllwc05uj0009l80f5xsndtlz/blocks/hfzgb1qs4f2f7prnw7jxvzsq?v=1695034123315"
+    text: "Lydia IUD devices are non-hormonal, long-lasting contraception (5-10 yrs.)\nDKT has 5 variants which can be T (the most common) or Y shaped - made of plastic coat with copper.\nThis device is inserted into the uterus and it is the most effective contraceptive according to WHO with about 99.9% efficacy. It can also serve as an emergency contraceptive if used within 5days of unprotected sexual intercourse.\nIt’s mechanism of action is to inhibit sperm penetration due to toxicity of copper to sperm.\n\nI can refer you to a clinic if you would like to adopt this method.\n\nDo you want me to refer you to a clinic where you can get this method?"
+    buttons:
+    - title: "Yes"
+      payload: /refer_me_local_goverment_area
+    - title: "No"
+      payload: /refer_me_no
+
   - condition:
       - type: slot
         name: product_name
@@ -2849,11 +2972,14 @@ responses:
       - type: slot
         name: product_name
         value: "Contraceptive_Injectables_Sayana_Press"
-    text: "SAYANA PRESS is indicated for long-term female contraception. Each subcutaneous injection prevents ovulation and provides contraception for at least 13 weeks.\n\nYou can click on the audio below to listen to a short introduction of Sayana press in pidgin, if you want to"
+    text: "SAYANA PRESS is indicated for long-term female contraception. Each subcutaneous injection prevents ovulation and provides contraception for at least 13 weeks.\n\n You can click on the audio below to listen to a short introduction of Sayana press in pidgin, if you want to."
     image: "https://s3.typebot.io/public/workspaces/clmis6ucm000il50gyvzllels/typebots/clmis9a0q000ol50gdavazp8y/blocks/y96zv9w050zzhom701pni0hk?v=1699596149796"
+    #text: "You can also click to watch a video on how to inject a Sayana Press in Pidgin.\n\n https://youtu.be/bXi_6rbJhsk?si=P8I9EIgLrz-eySNF \n\nYou can visit a family planning clinic/provider if you want to adopt this method.\n\nDid I answer your question?"
     buttons:
-    - title: "Audio"
-      payload: /Sayana_Press_audio
+      - title: "Listen Audio"
+        payload: /Sayana_Press_audio
+      #- text: "You can also click to watch a video on how to inject a Sayana Press in Pidgin.\n\n https://youtu.be/bXi_6rbJhsk?si=P8I9EIgLrz-eySNF \n\nYou can visit a family planning clinic/provider if you want to adopt this method.\n\nDid I answer your question?"
+    
 
   - condition:
       - type: slot
@@ -2923,21 +3049,31 @@ responses:
       - type: slot
         name: product_name
         value: "Self-Test Kit"
-    text: "https://youtu.be/D_IHm3p8RW0 \n\n The HIV Self-Test kit Or a Quick (by DKT) detects antibodies to both HIV-1 and HIV-2 with an oral swab, providing a confidential in-home testing option with results in as little as 20 minutes. It is the first in-home ORAL HIV SELF-TEST to be approved by WHO, NAFDAC, FMOH and US-FDA. There is a short video below for you to watch how to use. Click to watch"
+    text: "https://youtu.be/ap08kSitc1c?si=rYr53yvWPFVMKm6f \n\n The HIV Self-Test kit Or a Quick (by DKT) detects antibodies to both HIV-1 and HIV-2 with an oral swab, providing a confidential in-home testing option with results in as little as 20 minutes. It is the first in-home ORAL HIV SELF-TEST to be approved by WHO, NAFDAC, FMOH and US-FDA. There is a short video below for you to watch how to use. Click to watch"
     image: "https://s3.typebot.io/public/workspaces/clk9ixvcx0005jt0fbmqw1kmk/typebots/cllwc05uj0009l80f5xsndtlz/blocks/welytc2vq8j6ty950xofaquj?v=1695034713635"
     #attachment: { "type":"video", "payload":{ "src": "https://www.youtube.com/embed/D_IHm3p8RW0?si=Qf1anWxpbkqP3Nnq" } }
   - condition:
       - type: slot
         name: product_name
         value: "FIESTA Intim Natural Gel"
-    text: "Fiesta Gels  are classy and smooth, with wet sensation for heightened sexual pleasure.\n\nHow to Use. \n\nPour a small amount of fiesta intim natural gel on your palm and apply directly on erect penis. For extra plessure, you can also apply on the woman's intimate area. \n\nYou can click to watch a video on how to use this lubricant in Pidgin.\n\nYou can purchase it at your nearest pharmacy or health shop."
-    image: "https://s3.typebot.io/public/workspaces/clk9ixvcx0005jt0fbmqw1kmk/typebots/cllwc05uj0009l80f5xsndtlz/blocks/ve5s9r2zy5xql0w4xgwhz0h5?v=1695035450247"  
+    image: "https://s3.typebot.io/public/workspaces/clk9ixvcx0005jt0fbmqw1kmk/typebots/cllwc05uj0009l80f5xsndtlz/blocks/ve5s9r2zy5xql0w4xgwhz0h5?v=1695035450247" 
+    text: "Fiesta Gels  are classy and smooth, with wet sensation for heightened sexual pleasure.\n\nHow to Use. \n\nPour a small amount of fiesta intim natural gel on your palm and apply directly on erect penis. For extra plessure, you can also apply on the woman's intimate area. \n\nYou can click to watch a video on how to use this lubricant in Pidgin. \n\n https://www.youtube.com/watch?v=VtrXlRVaP-c \n\nYou can purchase it at your nearest pharmacy or health shop. \n\n Did I answer your question?"
+    buttons:
+      - title: Yes
+        payload: /satisfied_yes
+      - title: No
+        payload: /satisfied_no 
   - condition:
       - type: slot
         name: product_name
         value: "KY Jelly"
-    text: "KY Jelly is water-based, fragrance-free, non-greasy formula that quickly prepares you for sexual intimacy & eases the discomfort of personal dryness.You can purchase it at your nearest health shop."
     image: "https://s3.typebot.io/public/workspaces/clmis6ucm000il50gyvzllels/typebots/clmis9a0q000ol50gdavazp8y/blocks/rrkyravygai48dhokh93mewh?v=1695485135707"
+    text: "KY Jelly is water-based, fragrance-free, non-greasy formula that quickly prepares you for sexual intimacy & eases the discomfort of personal dryness. \n\nYou can click to watch a video on how to use this lubricant in Pidgin. \n\n https://www.youtube.com/watch?v=VtrXlRVaP-c \n\nYou can purchase it at your nearest pharmacy or health shop. \n\n Did I answer your question?"
+    buttons:
+      - title: Yes
+        payload: /satisfied_yes
+      - title: No
+        payload: /satisfied_no 
   - condition:
       - type: slot
         name: product_name
@@ -2981,8 +3117,26 @@ responses:
       - type: slot
         name: product_name
         value: "Female Condoms"
-    text: "https://youtu.be/zjmoQlAQP4Y \n\nFemale condoms area barrier method of contraception worn inside the vagina. They are made of thin soft plastic and has two ﬂexible rings – a removable ring at the closed end to help insertion and a fxed ring at the open end, which sits on the vulva to hold the condom in place"
+    text: |
+      Female condoms are a barrier method of contraception worn inside the vagina. They are made of thin soft plastic and have two flexible rings – a removable ring at the closed end to help insertion and a fixed ring at the open end, which sits on the vulva to hold the condom in place.
+
+      They prevent pregnancy by stopping sperm from meeting an egg.
+
+      You can click to watch a video on how to insert and remove a female condom in pidgin.
+
+      https://youtu.be/W3yRSR3ppmI?si=v1gh18arAKfAoUXu
+
+      https://youtu.be/7me1jsqg3Wg?si=ZYF7THwX_Mf4a0OW
+
+      You can visit your nearest chemist/pharmacy to buy.
+
+      Did I answer your question?
     image: "https://s3.typebot.io/public/workspaces/clmis6ucm000il50gyvzllels/typebots/clmis9a0q000ol50gdavazp8y/blocks/jav5wf2tigjpmzhgbj9z0nxr?v=1698191892025"
+    buttons:
+      - title: Yes
+        payload: /satisfied_yes
+      - title: No
+        payload: /satisfied_no
     #attachment: { "type":"video", "payload":{ "src": "https://www.youtube.com/watch?v=zjmoQlAQP4Y" } } #"You can click to watch a video on how to insert and remove a female condom in pidgin"
   - condition:
       - type: slot
@@ -3140,12 +3294,12 @@ responses:
       payload: /refer_me_no
 
   utter_Contraceptive_Injectables_Sayana_Press:
-  - text: "You can also click to watch a video on how to inject a Sayana Press in Pidgin.\n\nYou can visit a family planning clinic/provider if you want to adopt this method."
-    buttons:
-    - title: Yes
-      payload: /satisfied_yes
-    - title: No
-      payload: /satisfied_no
+  - text: "You can also click to watch a video on how to inject a Sayana Press in Pidgin.\n\n https://youtu.be/bXi_6rbJhsk?si=N6awo4I1F8xLIMvi \n\nYou can visit a family planning clinic/provider if you want to adopt this method."
+    #buttons:
+    #- title: Yes
+      #payload: /satisfied_yes
+    #- title: No
+      #payload: /satisfied_no
    
 
   utter_help_no:
