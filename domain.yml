@@ -1,8 +1,19 @@
 version: "3.1"
 
 intents:
+  - postpill_audio
+  - remove_insert_condom
+  - remove_male_condom
+  - diaphragm_audio
+  - previous_IUD
+  - previous_IUS
+  - previous_Injectibles
+  - previous_Emergency_contraceptive_pill
+  - previous_Daily_Contraceptive_Pill
+  - previous_Contraceptive_Implants
   - Progesta_audio
   - Sayana_Press_audio
+  - Daily_Audio
   - refer_me_local_goverment_area
   - refer_me_no
   - miso_fem_audio
@@ -61,17 +72,24 @@ actions:
   #- action_Contraceptive_Injectables_Sayana_Press_Progesta
   #- action_handle_contraception_selection
   - action_penegra_audio
+  - action_postpill_audio
+  - action_diaphragm_audio
+  - utter_health_store
   - action_mifepak_audio
   - action_Sayana_Press_audio
+  - action_Daily_Audio
   - utter_refer_me_no
   - action_miso_fem_audio
   - action_Progesta_audio
   - action_ask_gpt
   - action_intro
+  - utter_diaphragm_two
   - action_audio
   - action_reset_product_slot
   - utter_preg_prevention_duration
   - utter_why_not_satisfy
+  - action_remove_insert_condom
+  - action_remove_male_condom
   - action_reset_previous_contraception_slot
   - action_reset_discon_req_reason_slot
   - utter_chat_gpt_answer
@@ -2370,7 +2388,7 @@ responses:
     button_type: vertical
 
   utter_intro:
-  - text: "Hey! How are you today?\n\nMy name is Honey. I am a family planning counsellor. I am here to help with family planning knowledge and give you counselling.\n\nBefore we continue, I would like to get some of your details to help you better."
+  - text: "Hey, How can I help you today?\n\nMy name is Honey. I am a family planning counsellor. I am here to help with family planning knowledge and give you counselling.\n\nI can answer your family planning questions, refer you to an agent to speak with, and also refer you to a family planning clinic.\n\nBefore we continue, I would like to get some of your details to help you better."
 
 
 
@@ -2398,10 +2416,10 @@ responses:
         payload: /start_family_planning
       - title: "I want to start using another method."
         payload: /stop_family_planning
-      - title: "I want to know about family planning products."
-        payload: /get_products
       - title: "I want to know about side effect."
         payload: /side_effects
+      - title: "I want to know about family planning products."
+        payload: /get_products 
     button_type: "vertical"
 
   utter_ask_side_effects:
@@ -2424,7 +2442,7 @@ responses:
     button_type: vertical
 
   utter_ask_previous_contraception_form_previous_contraception_method:
-  - text: "Ok. Which of these method do you want to know their side effects."
+  - text: "Ok, Which of these methods have you tried before?"
     buttons:
     - title: "Condoms and Diaphragms"
       payload: "/previous_Condoms_and_Diaphragms"
@@ -2453,6 +2471,7 @@ responses:
       payload: "/how_long_prevent_pregency"
     - title: "No"
       payload: "/why_not_satisfy"
+      
   utter_why_not_satisfy:
   - text: "Can you tell me why you were not satisfied?"
 
@@ -2521,7 +2540,11 @@ responses:
     text: "No, you did not understand it"
 
   utter_preg_duration_daily_pills:
-    - text: "\n Now let me tell you some of the advantages and disadvantages of daily pills \n\n  Advantages\n  1. They are very effective if used correctly.\n   2. Very safe for majority of women.\n   3. Return to fertility is very fast.\n  4. Thay regularize menstrual cycle, reduce heavy menstrual flow and reduce menstrual and ovulation pain.\n  5. Thay are simple and easy to use.\n \n Daily pill disadvantage  Now to the disadvantages of daily pills.\n  \n  Disadvantages\n   1. They must be taken daily which might be difficult to comply to.\n  2. They might cause mild and temporary side effect which usually goes away after some weeks such as:\n    a. Mild headache.\n     b. Nausea or vomitting.\n     c. Spotting or bleeding at intervals.\n     d. Breast tenderness and sore to touch.\n     e. Mood changes.\n  Are you with me?\n \n Who can n cannot use daily pills  On who can use and who cannot use daily pills.\n  \n  Who can use\n   1. You can use daily pill if you want a short term contraceptive method.\n  2. If you are a breastfeeding mothers (from six months after birth)\n   3. If you have irregular menstrual cycle.\n   4. If you dont't have migrainous headaches.\n   5. If you are taking antibiotics, antifungal or antiparasitic medications.\n  Do you understand?\n  \n  Who cannot use\n  1. If you are a breastfeeding mother from 6 weeks to 6 months postpartum.\n   2. If you are a smoker and over 35 years old.\n   3. If you have any of the following medical conditions, it is not advisable to take daily piils:\n   a. Blood Pressure\n   b. Venous thromboembolism\n   c. Stroke\n   d. Heart Disease\n    e. Liver Disease\n    f. Breast Cancer\n    g. Diabetes\n   h. Sickle-cell Anaemia.\n Do you have any of the medical conditions listed?"
+    - text: "\n Daily pills are combined oral contraceptive (COC) pills for pregnancy prevention, dermatological and gynecological conditions, and management of menstrual irregularities (heavy bleeding, painful menstruation, premenstrual syndrome).\n They work by thickening the mucus around the cervix, which makes it difficult for sperm to enter the uterus and reach any eggs that may have been released.\n Most combination pills come in either a 21-day pack (Dianofem and Desofem) or a 28-day pack (Levofem). \n Click to listen to a short introduction of daily pills in pidgin, if you want to."
+      buttons:
+        - title: "Listen Audio"
+          payload: /Daily_Audio
+    - text: "One pill is taken each day at about the same time for 21 days. Depending on your pack, you will either have a 7-day break (as in the 21-day pack) or you will take the pill that contains Iron for 7 days (the 28-day pack).\n Now let me tell you some of the advantages and disadvantages of daily pills \n\n  Advantages\n  1. They are very effective if used correctly.\n   2. Very safe for majority of women.\n   3. Return to fertility is very fast.\n  4. Thay regularize menstrual cycle, reduce heavy menstrual flow and reduce menstrual and ovulation pain.\n  5. Thay are simple and easy to use.\n \n Daily pill disadvantage  Now to the disadvantages of daily pills.\n  \n  Disadvantages\n   1. They must be taken daily which might be difficult to comply to.\n  2. They might cause mild and temporary side effect which usually goes away after some weeks such as:\n    a. Mild headache.\n     b. Nausea or vomitting.\n     c. Spotting or bleeding at intervals.\n     d. Breast tenderness and sore to touch.\n     e. Mood changes.\n  Are you with me?\n \n Who can n cannot use daily pills  On who can use and who cannot use daily pills.\n  \n  Who can use\n   1. You can use daily pill if you want a short term contraceptive method.\n  2. If you are a breastfeeding mothers (from six months after birth)\n   3. If you have irregular menstrual cycle.\n   4. If you dont't have migrainous headaches.\n   5. If you are taking antibiotics, antifungal or antiparasitic medications.\n  Do you understand?\n  \n  Who cannot use\n  1. If you are a breastfeeding mother from 6 weeks to 6 months postpartum.\n   2. If you are a smoker and over 35 years old.\n   3. If you have any of the following medical conditions, it is not advisable to take daily piils:\n   a. Blood Pressure\n   b. Venous thromboembolism\n   c. Stroke\n   d. Heart Disease\n    e. Liver Disease\n    f. Breast Cancer\n    g. Diabetes\n   h. Sickle-cell Anaemia.\n Do you have any of the medical conditions listed?"
       buttons:
         - title: "Yes"
           payload: "/refer_me"
@@ -2577,6 +2600,9 @@ responses:
   utter_emergency_pills_effects_Postpill:
   - text: "Postpill is one-dose emergency contraceptive pill by DKT. It contains 1.5 mg Levongestrel. POSTPILL should be taken orally as soon as possible within 24 hours but can still be taken within 5 days (120 hours) of unprotected \n\nYou can click on the audio below to listen to a short introduction of Postpill in pidgin, if you want to."
     image: "https://s3.typebot.io/public/workspaces/clk9ixvcx0005jt0fbmqw1kmk/typebots/cllwc05uj0009l80f5xsndtlz/blocks/empvv7jez37bc3q35iteegbi?v=1695031858327"
+    # buttons:
+    #   - title: "Listen Audio"
+    #     payload: /postpill_audio
 
   utter_emergency_pills_effects_Postinor_2:
   - text: "POSTINOR is an Emergency Contraceptive Pill (ECP) which safely prevents unwanted accidental pregnancy within 72 hours after unprotected sexual intercourse.\n\nIt doesn’t work if you are already pregnant and will not harm an already established pregnancy. The sooner you take POSTINOR, the more effective it is.\n\nYou can buy it at any pharmacy or health store around you."
@@ -2591,28 +2617,33 @@ responses:
       - title: "No"
         payload: "/ask_gpt"
   utter_diaphragm:
-  - text: "A diaphragm is a  type of barrier contraceptive device inserted into the vagina before sex to cover the cervix so that sperm can't get into the womb (uterus). You need to use spermicide with it (spermicides kill sperm). The diaphragm must be left in place for at least 6 hours after sex.  The diaphragm is a vaginal barrier contraceptive that is woman-controlled, nonhormonal, and appropriate for women who cannot or do not want to use hormonal contraceptive methods, intrauterine devices, or condoms.\n Now let me tell you some of the advantages and disadvantages of Diaphragms.\n \n Advantages\n 1. Diaphragms does not have hormones, so no side effect.\n 2. Good option for women who prefer non-hormonal contraceptive method.\n 3. They may be ftted at any time (post-partum mothers must wait for 6 weeks after delivery or mid-trimester abortion) \n 4. They can be inserted up to 6 hours before sex to avoid\n interruption \n 5. Only used when needed and gives the woman absolute control.\n 6. One size fits most women\n 7. Portable and convinient - it comes with specially designed case that is discreet and fits in a bag.\n 8. Easy to use - insertion and removal gets better with practice\n 9. Can be used up to 2 years with proper care.\n Now to the disadvantages of using a Diaphragm.\n \n Disadvantages\n 1.They are not readily available in Nigeria.\n 2. They may be expensive to some users.\n 3. The user must remember to insert the diaphragm before\n intercourse and keep in place for at least 6 hours after sex\n (but not more than 24 hours) \n 4. They require sepcial care and storage.\n 5. They can cause urinary tract infection.\n 6. A different size of diaphragm may be required after childbirth or if woman gains weightThey can be damaged by excessive use or poor storage \n Are you with me?"
-    buttons: 
+  - text: "A diaphragm is a  type of barrier contraceptive device inserted into the vagina before sex to cover the cervix so that sperm can't get into the womb (uterus). You need to use spermicide with it (spermicides kill sperm). The diaphragm must be left in place for at least 6 hours after sex.  The diaphragm is a vaginal barrier contraceptive that is woman-controlled, nonhormonal, and appropriate for women who cannot or do not want to use hormonal contraceptive methods, intrauterine devices, or condoms.\n\nClick to listen to a short introduction of diaphragm in Pidgin, if you want."
+    buttons:
       - title: "Yes"
-        payload: "Yes"
-      - title: "No"
-        payload: "/ask_gpt"
+        payload: "/diaphragm_audio"
+  utter_diaphragm_two:
+  - text: "Now let me tell you some of the advantages and disadvantages of Diaphragms.\n \n Advantages\n 1. Diaphragms does not have hormones, so no side effect.\n 2. Good option for women who prefer non-hormonal contraceptive method.\n 3. They may be ftted at any time (post-partum mothers must wait for 6 weeks after delivery or mid-trimester abortion) \n 4. They can be inserted up to 6 hours before sex to avoid\n interruption \n 5. Only used when needed and gives the woman absolute control.\n 6. One size fits most women\n 7. Portable and convinient - it comes with specially designed case that is discreet and fits in a bag.\n 8. Easy to use - insertion and removal gets better with practice\n 9. Can be used up to 2 years with proper care.\n\nDo you understand"
+  utter_diaphragm_three:
+  - text: "Now to the disadvantages of using a Diaphragm.\n \n Disadvantages\n 1.They are not readily available in Nigeria.\n 2. They may be expensive to some users.\n 3. The user must remember to insert the diaphragm before\n intercourse and keep in place for at least 6 hours after sex\n (but not more than 24 hours) \n 4. They require sepcial care and storage.\n 5. \n\nThey can cause urinary tract infection.\n 6. A different size of diaphragm may be required after childbirth or if woman gains weightThey can be damaged by excessive use or poor storage \n\n Are you with me?"
   utter_female_condom:
     - text: "Female condoms are barrier method of contraception worn inside the vagina. They are made of thin soft plastic and has two ﬂexible rings – a removable ring at the closed end to help insertion and a fxed ring at the open end, which sits on the vulva to hold the condom in place \n  They prevent pregnancy by stopping sperm from meeting an egg. \n Some of its advantages includes:\n 1. No medical prescription is required.\n 2. Female condoms are widely available.\n 3. No have no side effect.\n 4. They protect against some sexually tramitted infections.\n 5. They are cheap.\n 6. Woman has control over usage and used only when needed.\n \n and oneof its disadvantage is that it might be making unpleasant noise during intercourse.On who can use and who cannot use female condoms. \n Who can use\n 1. If you want a safe and efffective non-hormonal form of contraceptive.\n 2. If you cannot use hormonal method od contraception for medical reasons.\n 3. If you have sexual intercourse occasionally.\n 4. If you have multiple sexual partners\n Then if you have genital /uterine prolapse (when the uterus descends toward or into the vagina), you cannot use the female condom.\n Ok, let me show you what a female condom looks like and how to use it."
       image: "https://s3.typebot.io/public/workspaces/clmis6ucm000il50gyvzllels/typebots/clmis9a0q000ol50gdavazp8y/blocks/jav5wf2tigjpmzhgbj9z0nxr?v=1698191892025"
   utter_male_condom:
-    - text: "A condom is a thin covering that fits over a hard penis. It decreases the risk of pregnancy and sexually transmitted infections (STIs) by stopping sperm and body fluids from passing between partners."
+    - text: "A condom is a thin covering that fits over a hard penis. It decreases the risk of pregnancy and sexually transmitted infections (STIs) by stopping sperm and body fluids from passing between partners.\n\n You can click the audio to listen to how to insert a condom correctly in Pidgin if you want to."
+      buttons:
+      - title: "Listen Audio Remove a Male Condom"
+        payload: "/remove_male_condom"
+      - title: "Listen Audio How to insert a condom"
+        payload: "/remove_insert_condom"
+      button_type: vertical
   utter_implants:
     - text: "Implants are small, flexible rods inserted under the skin, typically in the arm. They release hormones (usually progestin) to prevent pregnancy.\n They are long-term birth control method also called long-acting reversible contraception, or LARC. They provide contraception, lasting up to 3 - 5 years but can be removed at anytime.\n \n They work by preventing the release of egg and thickens the cervical mucus making it difficult for sperm to reach the egg."
-  
-
   utter_preg_duration:
     - condition:
       - type: slot
         name: preg_prevention_duration
         value: 0-3 months
-      text: "If you want to prevent pregnancy within 0-3 months, the short term family planning methods or the Injectables will be the best for you.
-            \n\n\n The short term family planning methods are:\n 1. Daily contraceptive pills\n 2. Emergency contraceptive pills\n 3. The barrier contraceptives which are the diaphragms and condoms and then the Injectables\n\n\n Click on any of them to get the full details about them.\n\n\nOk, let me tell you some of the advantages and disadvantages of contraceptive Injectables.\n\n\n Advantages\n 1. They are highly effective and safe.\n 2. They do not interfer with sexual intercourse.\n 3. They can be self adminstered or provided by a trained non-medical personnel.\n 4. They protect against ectopic pregnancy.\n 5.They reduce symptoms of endometriosis.\n 6. They are convinient, easy to use and administered once in a month."
+      text: "If you want to prevent pregnancy within 0-3 months, the short term family planning methods or the Injectables will be the best for you.\n\n\n The short term family planning methods are:\n 1. Daily contraceptive pills\n 2. Emergency contraceptive pills\n 3. The barrier contraceptives which are the diaphragms and condoms and then the Injectables\n\n\n Click on any of them to get the full details about them.\n\n\nOk, let me tell you some of the advantages and disadvantages of contraceptive Injectables.\n\n\n Advantages\n 1. They are highly effective and safe.\n 2. They do not interfer with sexual intercourse.\n 3. They can be self adminstered or provided by a trained non-medical personnel.\n 4. They protect against ectopic pregnancy.\n 5.They reduce symptoms of endometriosis.\n 6. They are convinient, easy to use and administered once in a month."
       buttons:
       - title: "Daily Contraceptive Pills"
         payload: "/daily_pills"
@@ -2679,7 +2710,7 @@ responses:
       button_type: vertical
     
   utter_ius:
-  - text: "Intrauterine system (IUS) are hormonal intrauterine device (IUD). They contains Levenogestrel for the treatment of some gynaecological conditions (endometriosis, adenomyosis, endometrial hyperplasia, etc.) and pregnancy prevention. \n\nIt has contraceptive coverage for up to 5 years.\n  How they work is that \n For pregnancy prevention, it works by thickening the mucus in the cervix to stop sprem from fertilizing an egg. It also thins out the lining of the uterus and suppresses ovulation and for gynaecological conditions, it reduces the endometrial lining of the womb making the period lighter and less painful.\n\n This means that you can use IUS for both gynaecological matters and to prevent pregnancy.\n\nDo you understand?"
+  - text: "Intrauterine system (IUS) are hormonal intrauterine device (IUD). They contains Levenogestrel for the treatment of some gynaecological conditions (endometriosis, adenomyosis, endometrial hyperplasia, etc.) and pregnancy prevention. \n\nIt has contraceptive coverage for up to 5 years.\nHow they work is that \nFor pregnancy prevention, it works by thickening the mucus in the cervix to stop sprem from fertilizing an egg. It also thins out the lining of the uterus and suppresses ovulation and for gynaecological conditions, it reduces the endometrial lining of the womb making the period lighter and less painful.\n\nThis means that you can use IUS for both gynaecological matters and to prevent pregnancy.\n\nDo you understand?"
     buttons:
       - title: "Yes"
         payload: "yes_understand"
@@ -3078,11 +3109,11 @@ responses:
       - type: slot
         name: product_name
         value: "PostPill"
-    text: "Postpill is one-dose emergency contraceptive pill by DKT. It contains 1.5 mg Levongestrel. POSTPILL should be taken orally as soon as possible within 24 hours but can still be taken within 5 days (120 hours) of unprotected We can refer you to the nearest agent/clinic."
+    text: "Postpill is one-dose emergency contraceptive pill by DKT. It contains 1.5 mg Levongestrel. POSTPILL should be taken orally as soon as possible within 24 hours but can still be taken within 5 days (120 hours) of unprotected. \n\n You can click on the audio below to listen to a short introduction of Postpill in Pidgin if you want to."
     image: "https://s3.typebot.io/public/workspaces/clk9ixvcx0005jt0fbmqw1kmk/typebots/cllwc05uj0009l80f5xsndtlz/blocks/empvv7jez37bc3q35iteegbi?v=1695031858327"
     # buttons:
-    # - title: "click to play audio"
-    #   payload: /audio
+    #   - title: "Listen Audio"
+    #     payload: /postpill_audio
   - condition:
       - type: slot
         name: product_name
@@ -3144,12 +3175,17 @@ responses:
         value: "emergency_Postpill"
     text: "Postpill is one-dose emergency contraceptive pill by DKT. It contains 1.5 mg Levongestrel. POSTPILL should be taken orally as soon as possible within 24 hours but can still be taken within 5 days (120 hours) of unprotected\n\n You can click on the audio below to listen to a short introduction of Postpill in pidgin, if you want to.\n\nYou can buy Postpill at any pharmacy or health store around you."
     image: "https://s3.typebot.io/public/workspaces/clk9ixvcx0005jt0fbmqw1kmk/typebots/cllwc05uj0009l80f5xsndtlz/blocks/empvv7jez37bc3q35iteegbi?v=1695031858327"
+    buttons:
+      - title: "Listen Audio"
+        payload: /postpill_audio
   - condition:
       - type: slot
         name: product_name
         value: "emegency_Postinor_2"
     image: "https://s3.typebot.io/public/workspaces/clmis6ucm000il50gyvzllels/typebots/clmis9a0q000ol50gdavazp8y/blocks/e9z01jouf3j57fqkqdc69u7h?v=1699871602192"
     text: "POSTINOR is an Emergency Contraceptive Pill (ECP) which safely prevents unwanted accidental pregnancy within 72 hours after unprotected sexual intercourse.\n\nIt doesn't work if you are already pregnant and will not harm an already established pregnancy.The sooner you take POSTINOR, the more effective it is.\n\nYou can buy it at any pharmacy or health store around you."
+  utter_health_store:
+  - text: "You can click on the audio below to listen to a short introduction of Postpill in Pidgin if you want to."
   utter_other_issues:
   - text: "What other issue would you like to know about?"
     buttons:
